@@ -1,0 +1,16 @@
+id: python-no-unknown-parameters
+language: Python
+severity: warning
+message: Any parameters leave input unparsed; accept a domain type and parse at the I/O boundary.
+rule:
+  all:
+    - kind: typed_parameter
+    - has:
+        kind: identifier
+        regex: '^Any$'
+        stopBy: end
+    - not:
+        has:
+          kind: identifier
+          regex: '^cause$'
+          stopBy: end

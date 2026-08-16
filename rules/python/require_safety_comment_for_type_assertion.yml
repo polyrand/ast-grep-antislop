@@ -1,0 +1,27 @@
+id: python-require-safety-comment-for-type-assertion
+language: Python
+severity: warning
+message: This cast has no SAFETY justification immediately before or inside its statement.
+utils:
+  cast-call:
+    any:
+      - pattern: cast($TYPE, $VALUE)
+      - pattern: typing.cast($TYPE, $VALUE)
+rule:
+  all:
+    - any:
+        - kind: return_statement
+        - kind: expression_statement
+    - has:
+        matches: cast-call
+        stopBy: end
+    - not:
+        any:
+          - has:
+              kind: comment
+              regex: '(?s).*\bSAFETY\s*:.*'
+              stopBy: end
+          - follows:
+              kind: comment
+              regex: '(?s).*\bSAFETY\s*:.*'
+              stopBy: neighbor

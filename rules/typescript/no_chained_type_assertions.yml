@@ -1,0 +1,18 @@
+id: typescript-no-chained-type-assertions
+language: TypeScript
+severity: warning
+message: Chained type assertions discard type evidence; preserve the precise type or parse at the boundary.
+rule:
+  any:
+    - kind: as_expression
+      has:
+        any:
+          - kind: as_expression
+          - kind: type_assertion
+        stopBy: end
+    - kind: type_assertion
+      has:
+        any:
+          - kind: as_expression
+          - kind: type_assertion
+        stopBy: end

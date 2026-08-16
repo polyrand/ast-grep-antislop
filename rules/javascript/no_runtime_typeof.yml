@@ -1,0 +1,6 @@
+id: javascript-no-runtime-typeof
+language: JavaScript
+severity: warning
+message: Runtime typeof narrowing does not establish a contract; parse input at its boundary.
+rule:
+  pattern: typeof $VALUE

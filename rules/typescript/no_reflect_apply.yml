@@ -1,0 +1,9 @@
+id: typescript-no-reflect-apply
+language: TypeScript
+severity: warning
+message: Replace Reflect.apply with a typed function call or named dispatch interface.
+rule:
+  any:
+    - pattern: Reflect.apply($$$ARGS)
+    - pattern: Reflect["apply"]($$$ARGS)
+    - pattern: "Reflect['apply']($$$ARGS)"

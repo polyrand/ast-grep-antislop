@@ -1,0 +1,13 @@
+id: python-no-unknown-returns
+language: Python
+severity: warning
+message: This function exposes Any to callers; parse the value and return a domain type.
+rule:
+  kind: function_definition
+  has:
+    field: return_type
+    kind: type
+    has:
+      kind: identifier
+      regex: '^Any$'
+      stopBy: end

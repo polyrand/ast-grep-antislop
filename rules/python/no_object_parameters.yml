@@ -1,0 +1,10 @@
+id: python-no-object-parameters
+language: Python
+severity: warning
+message: Broad object parameters hide the input contract; accept a named owner protocol or class.
+rule:
+  kind: typed_parameter
+  has:
+    kind: identifier
+    regex: '^object$'
+    stopBy: end

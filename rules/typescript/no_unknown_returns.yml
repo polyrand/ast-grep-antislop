@@ -1,0 +1,29 @@
+id: typescript-no-unknown-returns
+language: TypeScript
+severity: warning
+message: This function exposes unknown to callers; parse the value and return a domain type.
+rule:
+  all:
+    - any:
+        - kind: function_declaration
+        - kind: function_expression
+        - kind: arrow_function
+        - kind: function_type
+        - kind: method_signature
+        - kind: call_signature
+        - kind: abstract_method_signature
+    - has:
+        field: return_type
+        any:
+          - kind: predefined_type
+            regex: '^unknown$'
+          - kind: type_annotation
+            has:
+              kind: predefined_type
+              regex: '^unknown$'
+              stopBy: end
+          - kind: generic_type
+            has:
+              kind: predefined_type
+              regex: '^unknown$'
+              stopBy: end

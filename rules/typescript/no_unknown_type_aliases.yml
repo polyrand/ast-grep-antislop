@@ -1,0 +1,6 @@
+id: typescript-no-unknown-type-aliases
+language: TypeScript
+severity: warning
+message: This alias only conceals unknown; keep unknown explicit at the parsing boundary.
+rule:
+  pattern: type $ALIAS = unknown

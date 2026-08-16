@@ -1,0 +1,19 @@
+id: javascript-no-widen-then-assert
+language: JavaScript
+severity: warning
+message: This JSDoc flow widens evidence and then recreates it; preserve the original precise value.
+rule:
+  all:
+    - pattern: const $OUT = $WIDE
+    - follows:
+        kind: comment
+        regex: '(?s).*@type\s*\{[^}]+\}.*'
+        stopBy: neighbor
+    - follows:
+        all:
+          - pattern: const $WIDE = $SOURCE
+          - follows:
+              kind: comment
+              regex: '(?s).*@type\s*\{\s*(?:unknown|object|Record\s*<.*>)\s*\}.*'
+              stopBy: neighbor
+        stopBy: end

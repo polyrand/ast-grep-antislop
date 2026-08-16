@@ -1,0 +1,9 @@
+id: javascript-no-reflect-get
+language: JavaScript
+severity: warning
+message: Replace Reflect.get with direct property access or boundary parsing.
+rule:
+  any:
+    - pattern: Reflect.get($$$ARGS)
+    - pattern: Reflect["get"]($$$ARGS)
+    - pattern: "Reflect['get']($$$ARGS)"

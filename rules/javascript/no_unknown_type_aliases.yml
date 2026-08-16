@@ -1,0 +1,7 @@
+id: javascript-no-unknown-type-aliases
+language: JavaScript
+severity: warning
+message: This JSDoc typedef only conceals unknown; keep unknown explicit at the parsing boundary.
+rule:
+  kind: comment
+  regex: '(?s).*@typedef\s*\{\s*unknown\s*\}.*'

@@ -1,0 +1,37 @@
+id: python-no-widen-then-assert
+language: Python
+severity: warning
+message: This flow widens known evidence and then recreates it with cast; keep the precise type.
+rule:
+  any:
+    - all:
+        - pattern:
+            context: '$WIDE: $BROAD = $SOURCE'
+            selector: expression_statement
+        - precedes:
+            pattern:
+              context: '$OUT = cast($TYPE, $WIDE)'
+              selector: expression_statement
+            stopBy: end
+    - all:
+        - pattern:
+            context: '$WIDE: $BROAD = $SOURCE'
+            selector: expression_statement
+        - precedes:
+            pattern:
+              context: '$OUT = typing.cast($TYPE, $WIDE)'
+              selector: expression_statement
+            stopBy: end
+constraints:
+  BROAD:
+    regex: '(?s)^(?:Any|typing\.Any|object|dict\s*\[.*\]|Dict\s*\[.*\]|Mapping\s*\[.*\])$'
+  SOURCE:
+    any:
+      - kind: dictionary
+      - kind: list
+      - kind: set
+      - kind: tuple
+      - kind: string
+      - kind: integer
+      - kind: float
+      - kind: identifier

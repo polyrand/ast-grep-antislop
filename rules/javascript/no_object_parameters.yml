@@ -1,0 +1,7 @@
+id: javascript-no-object-parameters
+language: JavaScript
+severity: warning
+message: Broad object parameters hide the input contract; document and accept a named owner type.
+rule:
+  kind: comment
+  regex: '(?s).*@param\s*\{\s*object\s*\}.*'

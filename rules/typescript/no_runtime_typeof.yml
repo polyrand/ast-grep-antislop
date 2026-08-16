@@ -1,0 +1,6 @@
+id: typescript-no-runtime-typeof
+language: TypeScript
+severity: warning
+message: Runtime typeof narrowing does not establish a contract; parse input at its boundary.
+rule:
+  pattern: typeof $VALUE

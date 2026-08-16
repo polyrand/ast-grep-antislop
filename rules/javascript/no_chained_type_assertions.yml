@@ -1,0 +1,16 @@
+id: javascript-no-chained-type-assertions
+language: JavaScript
+severity: warning
+message: Chained runtime coercions discard evidence; parse once into the required domain value.
+rule:
+  pattern: $OUTER($INNER)
+constraints:
+  OUTER:
+    kind: identifier
+    regex: '^(?:Object|String|Number|Boolean)$'
+  INNER:
+    kind: call_expression
+    has:
+      field: function
+      kind: identifier
+      regex: '^(?:Object|String|Number|Boolean)$'

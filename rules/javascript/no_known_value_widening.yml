@@ -1,0 +1,52 @@
+id: javascript-no-known-value-widening
+language: JavaScript
+severity: warning
+message: This broad JSDoc type discards known value evidence; keep the inferred precise type.
+utils:
+  known-value:
+    any:
+      - kind: object
+      - kind: array
+      - kind: string
+      - kind: number
+      - kind: 'true'
+      - kind: 'false'
+      - kind: template_string
+      - kind: arrow_function
+      - kind: function_expression
+      - kind: class
+      - kind: new_expression
+  known-nonempty-dictionary-value:
+    any:
+      - kind: object
+        regex: '(?s)^\{\s*.+\s*\}$'
+      - kind: array
+      - kind: string
+      - kind: number
+      - kind: 'true'
+      - kind: 'false'
+      - kind: template_string
+      - kind: arrow_function
+      - kind: function_expression
+      - kind: class
+      - kind: new_expression
+rule:
+  any:
+    - all:
+        - kind: comment
+          regex: '(?s).*@type\s*\{\s*(?:unknown|object)\s*\}.*'
+        - precedes:
+            kind: lexical_declaration
+            has:
+              matches: known-value
+              stopBy: end
+            stopBy: neighbor
+    - all:
+        - kind: comment
+          regex: '(?s).*@type\s*\{\s*(?:Record\s*<.*>|Object\s*\.\s*<.*>)\s*\}.*'
+        - precedes:
+            kind: lexical_declaration
+            has:
+              matches: known-nonempty-dictionary-value
+              stopBy: end
+            stopBy: neighbor

@@ -1,0 +1,28 @@
+id: typescript-no-widen-then-assert
+language: TypeScript
+severity: warning
+message: This flow widens known evidence and then recreates it with an assertion; keep the precise type.
+rule:
+  any:
+    - all:
+        - pattern: const $OUT = $WIDE as $TYPE
+        - follows:
+            pattern: 'const $WIDE: $BROAD = $SOURCE'
+            stopBy: end
+    - all:
+        - pattern: const $OUT = <$TYPE>$WIDE
+        - follows:
+            pattern: 'const $WIDE: $BROAD = $SOURCE'
+            stopBy: end
+constraints:
+  BROAD:
+    regex: '(?s)^(?:unknown|any|object|Record\s*<.*>)$'
+  SOURCE:
+    any:
+      - kind: object
+      - kind: array
+      - kind: string
+      - kind: number
+      - kind: template_string
+      - kind: new_expression
+      - kind: identifier

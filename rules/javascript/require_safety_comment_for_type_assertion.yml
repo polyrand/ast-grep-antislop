@@ -1,0 +1,18 @@
+id: javascript-require-safety-comment-for-type-assertion
+language: JavaScript
+severity: warning
+message: This JSDoc type assertion has no SAFETY justification.
+rule:
+  all:
+    - kind: comment
+      regex: '(?s).*@type\s*\{[^}]+\}.*'
+    - not:
+        regex: '(?s).*\bSAFETY\s*:.*'
+    - not:
+        follows:
+          kind: comment
+          regex: '(?s).*\bSAFETY\s*:.*'
+          stopBy: neighbor
+    - precedes:
+        kind: parenthesized_expression
+        stopBy: neighbor

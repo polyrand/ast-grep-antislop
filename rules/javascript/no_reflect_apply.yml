@@ -1,0 +1,9 @@
+id: javascript-no-reflect-apply
+language: JavaScript
+severity: warning
+message: Replace Reflect.apply with a direct function call or named dispatch interface.
+rule:
+  any:
+    - pattern: Reflect.apply($$$ARGS)
+    - pattern: Reflect["apply"]($$$ARGS)
+    - pattern: "Reflect['apply']($$$ARGS)"

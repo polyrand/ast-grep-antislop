@@ -1,0 +1,14 @@
+id: javascript-no-shape-in-symbol-names
+language: JavaScript
+severity: warning
+message: Rename this symbol for its domain role; shape describes structure rather than ownership.
+rule:
+  all:
+    - any:
+        - kind: identifier
+        - kind: property_identifier
+        - kind: private_property_identifier
+        - kind: shorthand_property_identifier
+        - kind: shorthand_property_identifier_pattern
+        - kind: statement_identifier
+    - regex: '(?i)^.*shape.*$'

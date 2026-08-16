@@ -1,0 +1,7 @@
+id: javascript-no-unsafe-dictionary-type
+language: JavaScript
+severity: warning
+message: This JSDoc dictionary has no concrete value contract; use an owner or schema-derived value type.
+rule:
+  kind: comment
+  regex: '(?s).*@typedef\s*\{\s*(?:Record\s*<\s*[^,>]+\s*,\s*(?:unknown|any|object)\s*>|Object\s*\.\s*<\s*[^,>]+\s*,\s*(?:unknown|any|object)\s*>)\s*\}.*'

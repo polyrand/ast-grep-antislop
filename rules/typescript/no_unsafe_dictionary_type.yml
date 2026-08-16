@@ -1,0 +1,40 @@
+id: typescript-no-unsafe-dictionary-type
+language: TypeScript
+severity: warning
+message: This dictionary has no concrete value contract; use an owner or schema-derived value type.
+utils:
+  unsafe-atomic-value:
+    any:
+      - kind: predefined_type
+        regex: '^(?:unknown|any|object)$'
+      - kind: object_type
+        regex: '^\{\s*\}$'
+  unsafe-dictionary-value:
+    any:
+      - matches: unsafe-atomic-value
+      - kind: union_type
+        has:
+          matches: unsafe-atomic-value
+          stopBy: end
+      - kind: intersection_type
+        has:
+          matches: unsafe-atomic-value
+          stopBy: end
+      - kind: generic_type
+        has:
+          matches: unsafe-atomic-value
+          stopBy: end
+rule:
+  any:
+    - pattern:
+        context: 'type __Dictionary = Record<$KEY, $VALUE>'
+        selector: generic_type
+    - pattern:
+        context: 'type __Dictionary = { [$KEY: $KEY_TYPE]: $VALUE }'
+        selector: index_signature
+    - pattern:
+        context: 'type __Dictionary = { [$KEY in $KEY_TYPE]: $VALUE }'
+        selector: index_signature
+constraints:
+  VALUE:
+    matches: unsafe-dictionary-value

@@ -1,0 +1,12 @@
+id: javascript-no-conditional-empty-object-spread
+language: JavaScript
+severity: warning
+message: Conditional empty-object spread hides property omission; build the object explicitly.
+rule:
+  any:
+    - pattern:
+        context: 'const __result = { ...($COND ? $VALUE : {}) }'
+        selector: spread_element
+    - pattern:
+        context: 'const __result = { ...($COND ? {} : $VALUE) }'
+        selector: spread_element

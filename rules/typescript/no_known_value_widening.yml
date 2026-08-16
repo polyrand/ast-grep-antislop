@@ -1,0 +1,69 @@
+id: typescript-no-known-value-widening
+language: TypeScript
+severity: warning
+message: This explicit broad type discards known value evidence; keep inference or use satisfies.
+utils:
+  known-value:
+    any:
+      - kind: object
+      - kind: array
+      - kind: string
+      - kind: number
+      - kind: 'true'
+      - kind: 'false'
+      - kind: template_string
+      - kind: unary_expression
+      - kind: arrow_function
+      - kind: function_expression
+      - kind: class
+      - kind: new_expression
+  known-nonempty-dictionary-value:
+    any:
+      - kind: object
+        regex: '(?s)^\{\s*.+\s*\}$'
+      - kind: array
+      - kind: string
+      - kind: number
+      - kind: 'true'
+      - kind: 'false'
+      - kind: template_string
+      - kind: unary_expression
+      - kind: arrow_function
+      - kind: function_expression
+      - kind: class
+      - kind: new_expression
+rule:
+  any:
+    - pattern:
+        context: 'const $NAME: $BROAD_TYPE = $KNOWN_VALUE'
+        selector: variable_declarator
+    - pattern:
+        context: 'let $NAME: $BROAD_TYPE = $KNOWN_VALUE'
+        selector: variable_declarator
+    - pattern: $KNOWN_VALUE as $BROAD_TYPE
+    - all:
+        - pattern: return $KNOWN_VALUE
+        - inside:
+            pattern: 'function $FUNC($$$PARAMS): $BROAD_TYPE { $$$BODY }'
+            stopBy: end
+    - pattern:
+        context: 'const $NAME: $DICTIONARY_TYPE = $DICTIONARY_VALUE'
+        selector: variable_declarator
+    - pattern:
+        context: 'let $NAME: $DICTIONARY_TYPE = $DICTIONARY_VALUE'
+        selector: variable_declarator
+    - pattern: $DICTIONARY_VALUE as $DICTIONARY_TYPE
+    - all:
+        - pattern: return $DICTIONARY_VALUE
+        - inside:
+            pattern: 'function $FUNC($$$PARAMS): $DICTIONARY_TYPE { $$$BODY }'
+            stopBy: end
+constraints:
+  BROAD_TYPE:
+    regex: '(?s)^(?:unknown|object|\{.+\})$'
+  KNOWN_VALUE:
+    matches: known-value
+  DICTIONARY_TYPE:
+    regex: '(?s)^(?:Record\s*<.*>|Readonly\s*<\s*Record\s*<.*>\s*>)$'
+  DICTIONARY_VALUE:
+    matches: known-nonempty-dictionary-value

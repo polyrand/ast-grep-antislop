@@ -1,0 +1,10 @@
+id: javascript-no-unknown-parameters
+language: JavaScript
+severity: warning
+message: Unknown parameters leave input unparsed; document a domain type and parse at the I/O boundary.
+rule:
+  all:
+    - kind: comment
+      regex: '(?s).*@param\s*\{\s*(?:unknown|\?)\s*\}.*'
+    - not:
+        regex: '(?s).*@param\s*\{\s*(?:unknown|\?)\s*\}\s+(?:\[\s*)?cause(?:\s*\])?(?:\s|$).*'

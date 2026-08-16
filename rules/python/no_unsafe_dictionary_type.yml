@@ -1,0 +1,18 @@
+id: python-no-unsafe-dictionary-type
+language: Python
+severity: warning
+message: This mapping has no concrete value contract; use an owner or schema-derived value type.
+rule:
+  pattern:
+    context: 'value: $CONTAINER[$KEY, $VALUE]'
+    selector: generic_type
+constraints:
+  CONTAINER:
+    regex: '^(?:dict|Dict|Mapping|MutableMapping)$'
+  VALUE:
+    all:
+      - any:
+          - kind: type
+          - kind: identifier
+          - kind: attribute
+      - regex: '^(?:Any|typing\.Any|object)$'
