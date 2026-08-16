@@ -1,3 +1,4 @@
+# TypeScript
 id: typescript-no-unknown-returns
 language: TypeScript
 severity: warning
@@ -27,3 +28,27 @@ rule:
               kind: predefined_type
               regex: '^unknown$'
               stopBy: end
+---
+# JavaScript
+id: javascript-no-unknown-returns
+language: JavaScript
+severity: warning
+message: This JSDoc contract exposes unknown to callers; parse and return a domain value.
+rule:
+  kind: comment
+  regex: '(?s).*@returns?\s*\{\s*(?:unknown|Promise\s*<\s*unknown\s*>)\s*\}.*'
+---
+# Python
+id: python-no-unknown-returns
+language: Python
+severity: warning
+message: This function exposes Any to callers; parse the value and return a domain type.
+rule:
+  kind: function_definition
+  has:
+    field: return_type
+    kind: type
+    has:
+      kind: identifier
+      regex: '^Any$'
+      stopBy: end

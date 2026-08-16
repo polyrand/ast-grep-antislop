@@ -1,9 +1,0 @@
-id: python-no-single-use-functions
-language: Python
-severity: warning
-message: This immediately invoked lambda is used once; inline its expression.
-rule:
-  pattern: ($FUNCTION)($$$ARGS)
-constraints:
-  FUNCTION:
-    kind: lambda

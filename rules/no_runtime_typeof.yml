@@ -1,0 +1,28 @@
+# TypeScript
+id: typescript-no-runtime-typeof
+language: TypeScript
+severity: warning
+message: Runtime typeof narrowing does not establish a contract; parse input at its boundary.
+rule:
+  pattern: typeof $VALUE
+---
+# JavaScript
+id: javascript-no-runtime-typeof
+language: JavaScript
+severity: warning
+message: Runtime typeof narrowing does not establish a contract; parse input at its boundary.
+rule:
+  pattern: typeof $VALUE
+---
+# Python
+id: python-no-runtime-typeof
+language: Python
+severity: warning
+message: Ad hoc runtime type narrowing does not establish a contract; parse input at its boundary.
+rule:
+  any:
+    - pattern: isinstance($VALUE, $TYPE)
+    - pattern: type($VALUE) is $TYPE
+    - pattern: type($VALUE) is not $TYPE
+    - pattern: type($VALUE) == $TYPE
+    - pattern: type($VALUE) != $TYPE

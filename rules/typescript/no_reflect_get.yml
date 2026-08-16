@@ -1,9 +1,0 @@
-id: typescript-no-reflect-get
-language: TypeScript
-severity: warning
-message: Replace Reflect.get with typed property access or boundary parsing.
-rule:
-  any:
-    - pattern: Reflect.get($$$ARGS)
-    - pattern: Reflect["get"]($$$ARGS)
-    - pattern: "Reflect['get']($$$ARGS)"

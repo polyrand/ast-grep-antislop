@@ -1,0 +1,50 @@
+# TypeScript
+id: typescript-no-unknown-parameters
+language: TypeScript
+severity: warning
+message: Unknown parameters leave input unparsed; accept a domain type and parse at the I/O boundary.
+rule:
+  all:
+    - any:
+        - kind: required_parameter
+        - kind: optional_parameter
+        - kind: rest_pattern
+    - has:
+        kind: predefined_type
+        regex: '^unknown$'
+        stopBy: end
+    - not:
+        has:
+          kind: identifier
+          regex: '^cause$'
+          stopBy: end
+---
+# JavaScript
+id: javascript-no-unknown-parameters
+language: JavaScript
+severity: warning
+message: Unknown parameters leave input unparsed; document a domain type and parse at the I/O boundary.
+rule:
+  all:
+    - kind: comment
+      regex: '(?s).*@param\s*\{\s*(?:unknown|\?)\s*\}.*'
+    - not:
+        regex: '(?s).*@param\s*\{\s*(?:unknown|\?)\s*\}\s+(?:\[\s*)?cause(?:\s*\])?(?:\s|$).*'
+---
+# Python
+id: python-no-unknown-parameters
+language: Python
+severity: warning
+message: Any parameters leave input unparsed; accept a domain type and parse at the I/O boundary.
+rule:
+  all:
+    - kind: typed_parameter
+    - has:
+        kind: identifier
+        regex: '^Any$'
+        stopBy: end
+    - not:
+        has:
+          kind: identifier
+          regex: '^cause$'
+          stopBy: end

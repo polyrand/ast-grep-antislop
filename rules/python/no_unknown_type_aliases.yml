@@ -1,9 +1,0 @@
-id: python-no-unknown-type-aliases
-language: Python
-severity: warning
-message: This alias only conceals Any; keep Any explicit at the parsing boundary.
-rule:
-  any:
-    - pattern: $ALIAS = Any
-    - pattern: '$ALIAS: TypeAlias = Any'
-    - pattern: type $ALIAS = Any

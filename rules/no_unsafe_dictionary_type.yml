@@ -1,3 +1,4 @@
+# TypeScript
 id: typescript-no-unsafe-dictionary-type
 language: TypeScript
 severity: warning
@@ -38,3 +39,32 @@ rule:
 constraints:
   VALUE:
     matches: unsafe-dictionary-value
+---
+# JavaScript
+id: javascript-no-unsafe-dictionary-type
+language: JavaScript
+severity: warning
+message: This JSDoc dictionary has no concrete value contract; use an owner or schema-derived value type.
+rule:
+  kind: comment
+  regex: '(?s).*@typedef\s*\{\s*(?:Record\s*<\s*[^,>]+\s*,\s*(?:unknown|any|object)\s*>|Object\s*\.\s*<\s*[^,>]+\s*,\s*(?:unknown|any|object)\s*>)\s*\}.*'
+---
+# Python
+id: python-no-unsafe-dictionary-type
+language: Python
+severity: warning
+message: This mapping has no concrete value contract; use an owner or schema-derived value type.
+rule:
+  pattern:
+    context: 'value: $CONTAINER[$KEY, $VALUE]'
+    selector: generic_type
+constraints:
+  CONTAINER:
+    regex: '^(?:dict|Dict|Mapping|MutableMapping)$'
+  VALUE:
+    all:
+      - any:
+          - kind: type
+          - kind: identifier
+          - kind: attribute
+      - regex: '^(?:Any|typing\.Any|object)$'

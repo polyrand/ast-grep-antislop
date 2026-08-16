@@ -1,7 +1,0 @@
-id: javascript-no-unknown-returns
-language: JavaScript
-severity: warning
-message: This JSDoc contract exposes unknown to callers; parse and return a domain value.
-rule:
-  kind: comment
-  regex: '(?s).*@returns?\s*\{\s*(?:unknown|Promise\s*<\s*unknown\s*>)\s*\}.*'

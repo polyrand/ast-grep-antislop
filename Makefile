@@ -31,7 +31,7 @@ help: ## Display available targets and variables.
 
 define run_rule_tests
 	@count=0; \
-	for rule_file in rules/$(1)/*.yml; do \
+	for rule_file in rules/*.yml; do \
 		rule_name="$${rule_file##*/}"; \
 		rule_name="$${rule_name%.yml}"; \
 		sample_file="test_samples/$${rule_name}.$(2)"; \

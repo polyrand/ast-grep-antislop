@@ -1,7 +1,0 @@
-id: python-no-shape-in-symbol-names
-language: Python
-severity: warning
-message: Rename this symbol for its domain role; shape describes structure rather than ownership.
-rule:
-  kind: identifier
-  regex: '(?i)^.*shape.*$'

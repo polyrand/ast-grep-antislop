@@ -1,0 +1,27 @@
+# TypeScript
+id: typescript-no-unknown-type-aliases
+language: TypeScript
+severity: warning
+message: This alias only conceals unknown; keep unknown explicit at the parsing boundary.
+rule:
+  pattern: type $ALIAS = unknown
+---
+# JavaScript
+id: javascript-no-unknown-type-aliases
+language: JavaScript
+severity: warning
+message: This JSDoc typedef only conceals unknown; keep unknown explicit at the parsing boundary.
+rule:
+  kind: comment
+  regex: '(?s).*@typedef\s*\{\s*unknown\s*\}.*'
+---
+# Python
+id: python-no-unknown-type-aliases
+language: Python
+severity: warning
+message: This alias only conceals Any; keep Any explicit at the parsing boundary.
+rule:
+  any:
+    - pattern: $ALIAS = Any
+    - pattern: '$ALIAS: TypeAlias = Any'
+    - pattern: type $ALIAS = Any

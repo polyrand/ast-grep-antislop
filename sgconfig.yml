@@ -1,4 +1,2 @@
 ruleDirs:
-  - rules/javascript
-  - rules/typescript
-  - rules/python
+  - rules

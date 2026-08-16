@@ -1,0 +1,36 @@
+# TypeScript
+id: typescript-no-object-parameters
+language: TypeScript
+severity: warning
+message: Broad object parameters hide the input contract; accept a named owner type.
+rule:
+  all:
+    - any:
+        - kind: required_parameter
+        - kind: optional_parameter
+        - kind: rest_pattern
+    - has:
+        kind: predefined_type
+        regex: '^object$'
+        stopBy: end
+---
+# JavaScript
+id: javascript-no-object-parameters
+language: JavaScript
+severity: warning
+message: Broad object parameters hide the input contract; document and accept a named owner type.
+rule:
+  kind: comment
+  regex: '(?s).*@param\s*\{\s*object\s*\}.*'
+---
+# Python
+id: python-no-object-parameters
+language: Python
+severity: warning
+message: Broad object parameters hide the input contract; accept a named owner protocol or class.
+rule:
+  kind: typed_parameter
+  has:
+    kind: identifier
+    regex: '^object$'
+    stopBy: end

@@ -1,8 +1,0 @@
-id: python-no-reflect-get
-language: Python
-severity: warning
-message: Replace dynamic getattr access with a typed attribute or parse the boundary value.
-rule:
-  any:
-    - pattern: getattr($OWNER, $KEY)
-    - pattern: operator.attrgetter($KEY)($OWNER)

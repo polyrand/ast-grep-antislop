@@ -1,0 +1,73 @@
+# TypeScript
+id: typescript-no-single-use-functions
+language: TypeScript
+severity: warning
+message: This named function only forwards a call. If it has a single caller, inline the call instead.
+rule:
+  any:
+    - pattern: |
+        function $NAME($$$PARAMS) {
+          const $RESULT = $CALL;
+          return $RESULT;
+        }
+    - pattern: |
+        function $NAME($$$PARAMS): $RETURN_TYPE {
+          const $RESULT = $CALL;
+          return $RESULT;
+        }
+    - pattern: |
+        function $NAME($$$PARAMS) {
+          return $CALL;
+        }
+    - pattern: |
+        function $NAME($$$PARAMS): $RETURN_TYPE {
+          return $CALL;
+        }
+constraints:
+  CALL:
+    kind: call_expression
+---
+# JavaScript
+id: javascript-no-single-use-functions
+language: JavaScript
+severity: warning
+message: This named function only forwards a call. If it has a single caller, inline the call instead.
+rule:
+  any:
+    - pattern: |
+        function $NAME($$$PARAMS) {
+          const $RESULT = $CALL;
+          return $RESULT;
+        }
+    - pattern: |
+        function $NAME($$$PARAMS) {
+          return $CALL;
+        }
+constraints:
+  CALL:
+    kind: call_expression
+---
+# Python
+id: python-no-single-use-functions
+language: Python
+severity: warning
+message: This named function only forwards a call. If it has a single caller, inline the call instead.
+rule:
+  any:
+    - pattern: |
+        def $NAME($$$PARAMS):
+            $RESULT = $CALL
+            return $RESULT
+    - pattern: |
+        def $NAME($$$PARAMS) -> $RETURN_TYPE:
+            $RESULT = $CALL
+            return $RESULT
+    - pattern: |
+        def $NAME($$$PARAMS):
+            return $CALL
+    - pattern: |
+        def $NAME($$$PARAMS) -> $RETURN_TYPE:
+            return $CALL
+constraints:
+  CALL:
+    kind: call

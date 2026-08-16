@@ -1,8 +1,0 @@
-id: python-no-reflect-apply
-language: Python
-severity: warning
-message: Replace dynamic __call__ dispatch with an ordinary typed call or named protocol.
-rule:
-  any:
-    - pattern: $FUNCTION.__call__($$$ARGS)
-    - pattern: getattr($FUNCTION, "__call__")($$$ARGS)

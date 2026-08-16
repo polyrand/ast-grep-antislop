@@ -1,0 +1,41 @@
+# TypeScript
+id: typescript-no-conditional-empty-object-spread
+language: TypeScript
+severity: warning
+message: Conditional empty-object spread hides property omission; build the object explicitly.
+rule:
+  any:
+    - pattern:
+        context: 'const __result = { ...($COND ? $VALUE : {}) }'
+        selector: spread_element
+    - pattern:
+        context: 'const __result = { ...($COND ? {} : $VALUE) }'
+        selector: spread_element
+---
+# JavaScript
+id: javascript-no-conditional-empty-object-spread
+language: JavaScript
+severity: warning
+message: Conditional empty-object spread hides property omission; build the object explicitly.
+rule:
+  any:
+    - pattern:
+        context: 'const __result = { ...($COND ? $VALUE : {}) }'
+        selector: spread_element
+    - pattern:
+        context: 'const __result = { ...($COND ? {} : $VALUE) }'
+        selector: spread_element
+---
+# Python
+id: python-no-conditional-empty-object-spread
+language: Python
+severity: warning
+message: Conditional empty-dictionary expansion hides key omission; build the dictionary explicitly.
+rule:
+  any:
+    - pattern:
+        context: '__result = {**($VALUE if $COND else {})}'
+        selector: dictionary_splat
+    - pattern:
+        context: '__result = {**({} if $COND else $VALUE)}'
+        selector: dictionary_splat

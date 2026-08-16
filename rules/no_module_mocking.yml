@@ -1,0 +1,52 @@
+# TypeScript
+id: typescript-no-module-mocking
+language: TypeScript
+severity: warning
+message: Replace module mocking with dependency injection through a real interface or faithful test implementation.
+rule:
+  any:
+    - pattern: $FRAMEWORK.$METHOD($$$ARGS)
+    - pattern: $FRAMEWORK["mock"]($$$ARGS)
+    - pattern: $FRAMEWORK["doMock"]($$$ARGS)
+    - pattern: $FRAMEWORK["unstable_mockModule"]($$$ARGS)
+    - pattern: "$FRAMEWORK['mock']($$$ARGS)"
+    - pattern: "$FRAMEWORK['doMock']($$$ARGS)"
+    - pattern: "$FRAMEWORK['unstable_mockModule']($$$ARGS)"
+constraints:
+  FRAMEWORK:
+    regex: '^(?:vi|jest)$'
+  METHOD:
+    regex: '^(?:mock|doMock|unstable_mockModule)$'
+---
+# JavaScript
+id: javascript-no-module-mocking
+language: JavaScript
+severity: warning
+message: Replace module mocking with dependency injection through a real interface or faithful test implementation.
+rule:
+  any:
+    - pattern: $FRAMEWORK.$METHOD($$$ARGS)
+    - pattern: $FRAMEWORK["mock"]($$$ARGS)
+    - pattern: $FRAMEWORK["doMock"]($$$ARGS)
+    - pattern: $FRAMEWORK["unstable_mockModule"]($$$ARGS)
+    - pattern: "$FRAMEWORK['mock']($$$ARGS)"
+    - pattern: "$FRAMEWORK['doMock']($$$ARGS)"
+    - pattern: "$FRAMEWORK['unstable_mockModule']($$$ARGS)"
+constraints:
+  FRAMEWORK:
+    regex: '^(?:vi|jest)$'
+  METHOD:
+    regex: '^(?:mock|doMock|unstable_mockModule)$'
+---
+# Python
+id: python-no-module-mocking
+language: Python
+severity: warning
+message: Replace module patching with dependency injection through a real protocol or faithful test implementation.
+rule:
+  any:
+    - pattern: mock.patch($$$ARGS)
+    - pattern: unittest.mock.patch($$$ARGS)
+    - pattern: patch.object($$$ARGS)
+    - pattern: mocker.patch($$$ARGS)
+    - pattern: monkeypatch.setattr($$$ARGS)
