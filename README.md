@@ -1,6 +1,6 @@
 # ast-grep anti-slop rules
 
-This repository translates the 15 rules in `dmmulroy/anti-slop` into [ast-grep](https://github.com/ast-grep/ast-grep) warnings for JavaScript, TypeScript, and Python, and adds some rules like `no_single_use_functions_same_file` on top.
+This repository translates the 15 rules in `dmmulroy/anti-slop` into [ast-grep](https://github.com/ast-grep/ast-grep) warnings for JavaScript, TypeScript, and Python, and adds some rules on top.
 
 This project is inspired by [`dmmulroy/anti-slop`](https://github.com/dmmulroy/anti-slop), whose Oxlint rules are the source material for the rules translated here.
 
@@ -93,7 +93,7 @@ language: Python
 # ...
 ```
 
-`sgconfig.yml` points at the recursive `rules/` directory, so ast-grep loads all 21 files and all 61 rule documents.
+`sgconfig.yml` points at the recursive `rules/` directory, so ast-grep loads all 20 files and all 58 rule documents.
 
 Run every rule against the samples:
 
@@ -102,7 +102,7 @@ ast-grep scan test_samples
 make test
 ```
 
-The Makefile provides `test-typescript`, `test-javascript`, `test-python`, `test-single-use-functions-same-file`, `test-no-boolean-behaviour-parameter`, `test-no-discarded-validator-result`, `test-no-complex-boolean-condition`, `test-no-raw-deserializer-return`, and `test-no-nested-callback`. Each language target runs every rule with a same-named sample and fails if the expected structural match is absent. Dedicated targets verify exact warnings and valid samples for rules with reference-sensitive behavior.
+The Makefile provides `test-typescript`, `test-javascript`, `test-python`, `test-no-boolean-behaviour-parameter`, `test-no-discarded-validator-result`, `test-no-complex-boolean-condition`, `test-no-raw-deserializer-return`, and `test-no-nested-callback`. Each language target runs every rule with a same-named sample and fails if the expected structural match is absent. Dedicated targets verify exact warnings and valid samples for rules with reference-sensitive behavior.
 
 Run one language or rule family:
 
@@ -119,8 +119,3 @@ ast-grep YAML is syntax-aware but has no type checker, scope graph, alias resolu
 
 - shadowed `Reflect`, `vi`, and `jest` names cannot be distinguished from globals;
 - transitive type aliases and all known-value flows cannot be resolved;
-- same-name shadowing can conservatively suppress a single-use warning.
-
-`no_single_use_functions_same_file` is implemented entirely as an ast-grep rule. It binds a named function declaration, requires one same-name direct call under the file root, and rejects every structural form containing a second call. Two distinct AST nodes are either nested or occur in different sibling subtrees under their lowest common ancestor; `has-two-same-name-calls` covers both cases. The rule excludes lambdas, arrow functions, anonymous functions, recursive functions, zero-call functions, and functions with multiple direct calls. Calls through aliases are not counted, and a member call such as `parser.parse_args()` does not count as a direct call to `parse_args()`.
-
-A separate project-wide single-use rule is intentionally deferred until the same-file behavior is settled and tested. Project-wide identity cannot rely on a function name alone because unrelated modules and scopes can define the same name.

@@ -22,7 +22,6 @@ ARCHIVE_FILES = \
 	rules/no_reflect_get.yml \
 	rules/no_runtime_typeof.yml \
 	rules/no_shape_in_symbol_names.yml \
-	rules/no_single_use_functions_same_file.yml \
 	rules/no_unknown_parameters.yml \
 	rules/no_unknown_returns.yml \
 	rules/no_unknown_type_aliases.yml \
@@ -75,8 +74,8 @@ rules-archive: $(RULES_ARCHIVE) ## Create the downloadable ast-grep rules archiv
 $(RULES_ARCHIVE): $(ARCHIVE_FILES)
 	COPYFILE_DISABLE=1 tar -czf "$@" $(ARCHIVE_FILES)
 
-.PHONY: test test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return test-no-nested-callback
-test: test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return test-no-nested-callback ## Verify every rule against its same-named language sample.
+.PHONY: test test-javascript test-typescript test-python test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return test-no-nested-callback
+test: test-javascript test-typescript test-python test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return test-no-nested-callback ## Verify every rule against its same-named language sample.
 
 test-javascript: ## Verify all JavaScript rules.
 	$(call run_rule_tests,javascript,js)
@@ -86,27 +85,6 @@ test-typescript: ## Verify all TypeScript rules.
 
 test-python: ## Verify all Python rules.
 	$(call run_rule_tests,python,py)
-
-test-single-use-functions-same-file: ## Verify exact same-file direct-call counting.
-	@for extension in js ts py; do \
-		positive_sample="test_samples/no_single_use_functions_same_file.$${extension}"; \
-		valid_sample="test_samples/valid/no_single_use_functions_same_file.$${extension}"; \
-		positive_count="$$(ast-grep scan \
-			--rule rules/no_single_use_functions_same_file.yml \
-			--json=stream "$${positive_sample}" | awk 'END { print NR }')"; \
-		if [[ "$${positive_count}" -ne 1 ]]; then \
-			echo "FAIL single-use-functions-same-file: expected 1 warning for $${positive_sample}, got $${positive_count}"; \
-			exit 1; \
-		fi; \
-		valid_result="$$(ast-grep scan \
-			--rule rules/no_single_use_functions_same_file.yml \
-			--json=compact "$${valid_sample}")"; \
-		if [[ "$${valid_result}" != "[]" ]]; then \
-			echo "FAIL single-use-functions-same-file: unexpected warning for $${valid_sample}"; \
-			exit 1; \
-		fi; \
-	done; \
-	echo "PASS single-use-functions-same-file: exactly one direct call matched per language; zero-call, reused, and recursive functions were ignored"
 
 test-no-boolean-behaviour-parameter: ## Verify boolean behaviour parameter warnings and valid cases.
 	@for extension in js ts py; do \
