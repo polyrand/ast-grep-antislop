@@ -6,6 +6,29 @@ MAKEFLAGS += --no-builtin-rules
 UTC_ISO_DATE = $(shell date -u +"%Y-%m-%d%Z")
 UTC_ISO_TIME = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 RULES_ARCHIVE = ast-grep-antislop.tar.gz
+ARCHIVE_FILES = \
+	sgconfig.yml \
+	rules/no_boolean_behaviour_parameter.yml \
+	rules/no_chained_type_assertions.yml \
+	rules/no_complex_boolean_condition.yml \
+	rules/no_conditional_empty_object_spread.yml \
+	rules/no_discarded_validator_result.yml \
+	rules/no_known_value_widening.yml \
+	rules/no_module_mocking.yml \
+	rules/no_nested_callback.yml \
+	rules/no_object_parameters.yml \
+	rules/no_raw_deserializer_return.yml \
+	rules/no_reflect_apply.yml \
+	rules/no_reflect_get.yml \
+	rules/no_runtime_typeof.yml \
+	rules/no_shape_in_symbol_names.yml \
+	rules/no_single_use_functions_same_file.yml \
+	rules/no_unknown_parameters.yml \
+	rules/no_unknown_returns.yml \
+	rules/no_unknown_type_aliases.yml \
+	rules/no_unsafe_dictionary_type.yml \
+	rules/no_widen_then_assert.yml \
+	rules/require_safety_comment_for_type_assertion.yml
 
 .DEFAULT_GOAL := help
 .PHONY: help
@@ -49,8 +72,8 @@ endef
 .PHONY: rules-archive
 rules-archive: $(RULES_ARCHIVE) ## Create the downloadable ast-grep rules archive.
 
-$(RULES_ARCHIVE): sgconfig.yml $(wildcard rules/*.yml)
-	tar -czf "$@" sgconfig.yml rules
+$(RULES_ARCHIVE): $(ARCHIVE_FILES)
+	COPYFILE_DISABLE=1 tar -czf "$@" $(ARCHIVE_FILES)
 
 .PHONY: test test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return test-no-nested-callback
 test: test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return test-no-nested-callback ## Verify every rule against its same-named language sample.
