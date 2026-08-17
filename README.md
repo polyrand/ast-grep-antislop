@@ -70,9 +70,9 @@ downloads to work.
 ## Layout
 
 - `rules/` contains one YAML file per logical anti-slop rule.
-- Each rule file contains three independent YAML documents, separated by `---` and ordered TypeScript, JavaScript, then Python.
+- Most rule files contain three independent YAML documents, separated by `---` and ordered TypeScript, JavaScript, then Python. Language-specific rules contain only supported documents.
 - Every document keeps its own language-prefixed ID, parser, message, utilities, constraints, and structural pattern. The documents are colocated for comparison; they are not one shared cross-language matcher.
-- `test_samples/` contains one `.js`, `.ts`, and `.py` violation sample for every rule. Each filename uses the rule's underscore name. `test_samples/valid/` contains non-violations needed to verify reference-sensitive behavior.
+- `test_samples/` contains same-named violation samples for each supported language. Each filename uses the rule's underscore name. `test_samples/valid/` contains non-violations needed to verify reference-sensitive behavior.
 
 For example, `rules/no_reflect_get.yml` contains:
 
@@ -93,7 +93,7 @@ language: Python
 # ...
 ```
 
-`sgconfig.yml` points at the recursive `rules/` directory, so ast-grep loads all 20 files and all 60 rule documents.
+`sgconfig.yml` points at the recursive `rules/` directory, so ast-grep loads all 21 files and all 61 rule documents.
 
 Run every rule against the samples:
 
@@ -102,7 +102,7 @@ ast-grep scan test_samples
 make test
 ```
 
-The Makefile provides `test-typescript`, `test-javascript`, `test-python`, `test-single-use-functions-same-file`, `test-no-boolean-behaviour-parameter`, `test-no-discarded-validator-result`, `test-no-complex-boolean-condition`, and `test-no-raw-deserializer-return`. Each language target runs every multi-document rule file against its same-named sample and fails if the expected structural match is absent. Dedicated targets verify exact warnings and valid samples for rules with reference-sensitive behavior.
+The Makefile provides `test-typescript`, `test-javascript`, `test-python`, `test-single-use-functions-same-file`, `test-no-boolean-behaviour-parameter`, `test-no-discarded-validator-result`, `test-no-complex-boolean-condition`, `test-no-raw-deserializer-return`, and `test-no-nested-callback`. Each language target runs every rule with a same-named sample and fails if the expected structural match is absent. Dedicated targets verify exact warnings and valid samples for rules with reference-sensitive behavior.
 
 Run one language or rule family:
 

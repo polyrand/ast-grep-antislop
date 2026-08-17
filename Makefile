@@ -33,6 +33,9 @@ define run_rule_tests
 		rule_name="$${rule_file##*/}"; \
 		rule_name="$${rule_name%.yml}"; \
 		sample_file="test_samples/$${rule_name}.$(2)"; \
+		if [[ ! -f "$${sample_file}" ]]; then \
+			continue; \
+		fi; \
 		result="$$(ast-grep scan --rule "$${rule_file}" --json=compact "$${sample_file}")"; \
 		if [[ "$${result}" == "[]" ]]; then \
 			echo "FAIL $(1): $${rule_name} did not match $${sample_file}"; \
@@ -49,8 +52,8 @@ rules-archive: $(RULES_ARCHIVE) ## Create the downloadable ast-grep rules archiv
 $(RULES_ARCHIVE): sgconfig.yml $(wildcard rules/*.yml)
 	tar -czf "$@" sgconfig.yml rules
 
-.PHONY: test test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return
-test: test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return ## Verify every rule against its same-named language sample.
+.PHONY: test test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return test-no-nested-callback
+test: test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return test-no-nested-callback ## Verify every rule against its same-named language sample.
 
 test-javascript: ## Verify all JavaScript rules.
 	$(call run_rule_tests,javascript,js)
@@ -165,6 +168,17 @@ test-no-raw-deserializer-return: ## Verify raw deserializer return warnings and 
 		fi; \
 	done; \
 	echo "PASS no-raw-deserializer-return: one warning per language; domain parsing before return ignored"
+
+test-no-nested-callback: ## Verify nested Python function warnings.
+	@positive_sample="test_samples/no_nested_callback.py"; \
+	positive_count="$$(ast-grep scan \
+		--rule rules/no_nested_callback.yml \
+		--json=stream "$${positive_sample}" | awk 'END { print NR }')"; \
+	if [[ "$${positive_count}" -ne 3 ]]; then \
+		echo "FAIL no-nested-callback: expected 3 warnings for $${positive_sample}, got $${positive_count}"; \
+		exit 1; \
+	fi; \
+	echo "PASS no-nested-callback: nested defs and lambdas reviewed, including local helpers"
 
 
 .PHONY: gl

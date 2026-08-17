@@ -1,0 +1,17 @@
+# Python
+id: python-no-nested-callback
+language: Python
+severity: warning
+message: 'Review nested function. Async or parallel use can be valid. If outer state is not needed, move it to module scope. Check captured values, default arguments, and thread safety.'
+rule:
+  any:
+    - all:
+        - kind: function_definition
+        - inside:
+            kind: function_definition
+            stopBy: end
+    - all:
+        - kind: lambda
+        - inside:
+            kind: function_definition
+            stopBy: end
