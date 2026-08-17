@@ -1,6 +1,8 @@
 # ast-grep anti-slop rules
 
-This repository translates the 15 rules in `references/anti-slop/src` into ast-grep warnings for JavaScript, TypeScript, and Python, and adds `no_single_use_functions_same_file`.
+This repository translates the 15 rules in `dmmulroy/anti-slop` into ast-grep warnings for JavaScript, TypeScript, and Python, and adds some rules like `no_single_use_functions_same_file` on top.
+
+This project is inspired by [`dmmulroy/anti-slop`](https://github.com/dmmulroy/anti-slop), whose Oxlint rules are the source material for the rules translated here.
 
 ## Layout
 
