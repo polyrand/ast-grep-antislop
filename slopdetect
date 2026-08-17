@@ -1,0 +1,154 @@
+#!/bin/sh
+
+
+set -e
+set -u
+
+
+ARCHIVE_URL='https://raw.githubusercontent.com/polyrand/ast-grep-antislop/main/ast-grep-antislop.tar.gz'
+ARCHIVE_FILENAME='ast-grep-antislop.tar.gz'
+CACHE_DIRECTORY_NAME='ast-grep-antislop'
+
+
+usage () {
+    cat <<EOF
+Usage:
+  slopdetect [ast-grep scan options] [PATHS...]
+  slopdetect refresh-rules
+
+Download or update the ast-grep anti-slop rules and scan PATHS. With no
+PATHS, ast-grep scans the current directory. All arguments are passed to
+"ast-grep scan".
+
+Commands:
+  refresh-rules  Download the latest archive into the cache and exit.
+
+The rules are cached in:
+  \${XDG_CACHE_HOME:-\$HOME/.cache}/$CACHE_DIRECTORY_NAME
+EOF
+}
+
+
+ensure_command () {
+    if ! command -v "$1" >/dev/null 2>&1
+    then
+        printf '%s\n' "$1 could not be found" >&2
+        exit 1
+    fi
+}
+
+
+rules_are_cached () {
+    [ -f "$RULES_DIRECTORY/sgconfig.yml" ] && [ -d "$RULES_DIRECTORY/rules" ]
+}
+
+
+set_cache_directory () {
+    if [ -n "${XDG_CACHE_HOME:-}" ]; then
+        CACHE_DIRECTORY="$XDG_CACHE_HOME"
+    else
+        CACHE_DIRECTORY="${HOME:?HOME must be set when XDG_CACHE_HOME is unset}/.cache"
+    fi
+    RULES_DIRECTORY="$CACHE_DIRECTORY/$CACHE_DIRECTORY_NAME"
+}
+
+
+extract_rules () {
+    ARCHIVE_TO_EXTRACT="$1"
+    tar -xzf "$ARCHIVE_TO_EXTRACT" -C "$TEMP_EXTRACTED_DIRECTORY"
+
+    if [ ! -f "$TEMP_EXTRACTED_DIRECTORY/sgconfig.yml" ] || [ ! -d "$TEMP_EXTRACTED_DIRECTORY/rules" ]; then
+        printf 'error: downloaded archive does not contain sgconfig.yml and rules/\n' >&2
+        exit 1
+    fi
+}
+
+
+install_extracted_rules () {
+    if [ -e "$RULES_DIRECTORY" ] || [ -L "$RULES_DIRECTORY" ]; then
+        if [ ! -d "$RULES_DIRECTORY" ] && [ ! -L "$RULES_DIRECTORY" ]; then
+            printf 'error: cache path is not a directory: %s\n' "$RULES_DIRECTORY" >&2
+            exit 1
+        fi
+        rm -rf "$RULES_DIRECTORY"
+    fi
+    mv "$TEMP_EXTRACTED_DIRECTORY" "$RULES_DIRECTORY"
+}
+
+
+refresh_rules () {
+    mkdir -p "$CACHE_DIRECTORY"
+
+    TEMP_DIRECTORY="$(mktemp -d "$CACHE_DIRECTORY/.${CACHE_DIRECTORY_NAME}.XXXXXX")"
+    TEMP_ARCHIVE_FILE="$TEMP_DIRECTORY/$ARCHIVE_FILENAME"
+    TEMP_EXTRACTED_DIRECTORY="$TEMP_DIRECTORY/extracted"
+    trap 'rm -rf "$TEMP_DIRECTORY"' 0
+
+    mkdir -p "$TEMP_EXTRACTED_DIRECTORY"
+    curl -fsSL "$ARCHIVE_URL" -o "$TEMP_ARCHIVE_FILE"
+    extract_rules "$TEMP_ARCHIVE_FILE"
+    install_extracted_rules
+}
+
+
+cache_rules () {
+    if rules_are_cached; then
+        return 0
+    fi
+
+    refresh_rules
+}
+
+
+main () {
+
+    if [ "${1:-}" = '-h' ] || [ "${1:-}" = '--help' ]; then
+        usage
+        exit 0
+    fi
+
+    if [ "${1:-}" = 'refresh-rules' ]; then
+        shift
+        if [ "$#" -gt 0 ]; then
+            printf 'error: refresh-rules does not accept scan arguments\n' >&2
+            exit 1
+        fi
+
+        ensure_command 'curl'
+        ensure_command 'tar'
+        ensure_command 'mktemp'
+
+        set_cache_directory
+
+        refresh_rules
+        if ! rules_are_cached; then
+            printf 'error: downloaded archive does not contain sgconfig.yml and rules/\n' >&2
+            exit 1
+        fi
+
+        printf 'rules refreshed in %s\n' "$RULES_DIRECTORY"
+        exit 0
+    fi
+
+    ensure_command 'ast-grep'
+    ensure_command 'curl'
+    ensure_command 'tar'
+    ensure_command 'mktemp'
+
+    set_cache_directory
+
+    cache_rules
+
+    if ! rules_are_cached; then
+        printf 'error: downloaded repository does not contain sgconfig.yml and rules/\n' >&2
+        exit 1
+    fi
+
+    ast-grep scan --config "$RULES_DIRECTORY/sgconfig.yml" "$@"
+
+    exit 0
+
+}
+
+
+main "$@"

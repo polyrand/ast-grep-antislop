@@ -1,8 +1,71 @@
 # ast-grep anti-slop rules
 
-This repository translates the 15 rules in `dmmulroy/anti-slop` into ast-grep warnings for JavaScript, TypeScript, and Python, and adds some rules like `no_single_use_functions_same_file` on top.
+This repository translates the 15 rules in `dmmulroy/anti-slop` into [ast-grep](https://github.com/ast-grep/ast-grep) warnings for JavaScript, TypeScript, and Python, and adds some rules like `no_single_use_functions_same_file` on top.
 
 This project is inspired by [`dmmulroy/anti-slop`](https://github.com/dmmulroy/anti-slop), whose Oxlint rules are the source material for the rules translated here.
+
+## Install `slopdetect`
+
+`slopdetect` is a POSIX `sh` wrapper around `ast-grep`. It needs `ast-grep`,
+`curl`, `tar`, and `mktemp`.
+
+Install the script into a directory on your `PATH`:
+
+```sh
+bin_dir="${HOME:?HOME must be set}/bin"
+mkdir -p "$bin_dir"
+curl -fsSL \
+  https://raw.githubusercontent.com/polyrand/ast-grep-antislop/main/slopdetect \
+  -o "$bin_dir/slopdetect"
+chmod +x "$bin_dir/slopdetect"
+```
+
+Verify the installation with:
+
+```sh
+slopdetect --help
+```
+
+## Use `slopdetect`
+
+With no path arguments, the scanner checks the current directory. Other
+arguments are passed through to `ast-grep scan`:
+
+```sh
+slopdetect .
+slopdetect src test
+slopdetect --filter '^javascript-' src
+```
+
+On its first run, `slopdetect` downloads the small rules archive and extracts
+it under `${XDG_CACHE_HOME:-${HOME:?HOME must be set}/.cache}/ast-grep-antislop`.
+Later runs use the cached rules without contacting GitHub. Run
+`slopdetect refresh-rules` when you want to unconditionally download and
+install the latest archive. This subcommand exits after refreshing and does
+not scan.
+The cache path is independent of the scan path; with no path argument,
+ast-grep scans the current directory.
+
+```sh
+slopdetect refresh-rules
+```
+
+## Build and publish the rules archive
+
+The `rules-archive` Make target creates `ast-grep-antislop.tar.gz` at the
+repository root. The archive contains `sgconfig.yml` and the complete
+`rules/` directory:
+
+```sh
+make rules-archive
+tar -tzf ast-grep-antislop.tar.gz
+make test
+```
+
+After changing a rule, regenerate the archive and publish the updated
+`ast-grep-antislop.tar.gz` on the `main` branch. The installer and
+`slopdetect` both use raw GitHub URLs, so the archive must be committed for
+downloads to work.
 
 ## Layout
 

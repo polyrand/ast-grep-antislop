@@ -5,6 +5,7 @@ MAKEFLAGS += --no-builtin-rules
 
 UTC_ISO_DATE = $(shell date -u +"%Y-%m-%d%Z")
 UTC_ISO_TIME = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
+RULES_ARCHIVE = ast-grep-antislop.tar.gz
 
 .DEFAULT_GOAL := help
 .PHONY: help
@@ -41,6 +42,12 @@ define run_rule_tests
 	done; \
 	echo "PASS $(1): $${count} rules matched their samples"
 endef
+
+.PHONY: rules-archive
+rules-archive: $(RULES_ARCHIVE) ## Create the downloadable ast-grep rules archive.
+
+$(RULES_ARCHIVE): sgconfig.yml $(wildcard rules/*.yml)
+	tar -czf "$@" sgconfig.yml rules
 
 .PHONY: test test-javascript test-typescript test-python test-single-use-functions-same-file
 test: test-javascript test-typescript test-python test-single-use-functions-same-file ## Verify every rule against its same-named language sample.
