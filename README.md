@@ -93,7 +93,7 @@ language: Python
 # ...
 ```
 
-`sgconfig.yml` points at the recursive `rules/` directory, so ast-grep loads all 16 files and all 48 rule documents.
+`sgconfig.yml` points at the recursive `rules/` directory, so ast-grep loads all 17 files and all 51 rule documents.
 
 Run every rule against the samples:
 
@@ -102,7 +102,7 @@ ast-grep scan test_samples
 make test
 ```
 
-The Makefile provides `test-typescript`, `test-javascript`, `test-python`, and `test-single-use-functions-same-file`. Each language target runs every multi-document rule file against its same-named sample and fails if the expected structural match is absent. The dedicated single-use target verifies one warning for a one-call function and no warnings for zero-call, repeated, or recursive functions.
+The Makefile provides `test-typescript`, `test-javascript`, `test-python`, `test-single-use-functions-same-file`, and `test-no-boolean-behaviour-parameter`. Each language target runs every multi-document rule file against its same-named sample and fails if the expected structural match is absent. Dedicated targets verify exact warnings and valid samples for rules with reference-sensitive behavior.
 
 Run one language or rule family:
 

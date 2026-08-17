@@ -1,0 +1,116 @@
+# TypeScript
+id: typescript-no-boolean-behaviour-parameter
+language: TypeScript
+severity: warning
+message: 'Boolean flag selects behavior. Review abstraction. Split functions, or use domain type for distinct cases. Keep boolean for data.'
+rule:
+  all:
+    - any:
+        - kind: function_declaration
+        - kind: function_expression
+        - kind: arrow_function
+        - kind: method_definition
+    - has:
+        kind: if_statement
+        has:
+          field: condition
+          any:
+            - has:
+                kind: identifier
+                pattern: $FLAG
+                stopBy: end
+            - pattern: $FLAG
+          stopBy: end
+        stopBy: end
+    - has:
+        field: parameters
+        has:
+          all:
+            - any:
+                - kind: required_parameter
+                - kind: optional_parameter
+            - has:
+                field: pattern
+                pattern: $FLAG
+                stopBy: end
+            - has:
+                kind: predefined_type
+                regex: '^boolean$'
+                stopBy: end
+          stopBy: end
+        stopBy: end
+---
+# JavaScript
+id: javascript-no-boolean-behaviour-parameter
+language: JavaScript
+severity: warning
+message: 'Boolean flag selects behavior. Review abstraction. Split functions, or use domain type for distinct cases. Keep boolean for data.'
+rule:
+  all:
+    - any:
+        - kind: function_declaration
+        - kind: function_expression
+        - kind: arrow_function
+        - kind: method_definition
+    - has:
+        kind: if_statement
+        has:
+          field: condition
+          any:
+            - has:
+                kind: identifier
+                pattern: $FLAG
+                stopBy: end
+            - pattern: $FLAG
+          stopBy: end
+        stopBy: end
+    - has:
+        field: parameters
+        has:
+          pattern: $FLAG
+          stopBy: end
+        stopBy: end
+constraints:
+  FLAG:
+    regex: '^(?:is[A-Za-z_].*|has[A-Za-z_].*|can[A-Za-z_].*|should[A-Za-z_].*|allow[A-Za-z_].*|enable[A-Za-z_].*|disable[A-Za-z_].*|use[A-Za-z_].*|with[A-Za-z_].*|flag.*|enabled.*|disabled.*)$'
+---
+# Python
+id: python-no-boolean-behaviour-parameter
+language: Python
+severity: warning
+message: 'Boolean flag selects behavior. Review abstraction. Split functions, or use domain type for distinct cases. Keep boolean for data.'
+rule:
+  all:
+    - kind: function_definition
+    - has:
+        kind: if_statement
+        has:
+          field: condition
+          any:
+            - has:
+                kind: identifier
+                pattern: $FLAG
+                stopBy: end
+            - pattern: $FLAG
+          stopBy: end
+        stopBy: end
+    - has:
+        field: parameters
+        has:
+          all:
+            - any:
+                - kind: typed_parameter
+                - kind: typed_default_parameter
+            - has:
+                kind: identifier
+                pattern: $FLAG
+                stopBy: end
+            - has:
+                field: type
+                has:
+                  kind: identifier
+                  regex: '^bool$'
+                  stopBy: end
+                stopBy: end
+          stopBy: end
+        stopBy: end

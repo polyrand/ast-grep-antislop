@@ -49,8 +49,8 @@ rules-archive: $(RULES_ARCHIVE) ## Create the downloadable ast-grep rules archiv
 $(RULES_ARCHIVE): sgconfig.yml $(wildcard rules/*.yml)
 	tar -czf "$@" sgconfig.yml rules
 
-.PHONY: test test-javascript test-typescript test-python test-single-use-functions-same-file
-test: test-javascript test-typescript test-python test-single-use-functions-same-file ## Verify every rule against its same-named language sample.
+.PHONY: test test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter
+test: test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter ## Verify every rule against its same-named language sample.
 
 test-javascript: ## Verify all JavaScript rules.
 	$(call run_rule_tests,javascript,js)
@@ -81,6 +81,27 @@ test-single-use-functions-same-file: ## Verify exact same-file direct-call count
 		fi; \
 	done; \
 	echo "PASS single-use-functions-same-file: exactly one direct call matched per language; zero-call, reused, and recursive functions were ignored"
+
+test-no-boolean-behaviour-parameter: ## Verify boolean behaviour parameter warnings and valid cases.
+	@for extension in js ts py; do \
+		positive_sample="test_samples/no_boolean_behaviour_parameter.$${extension}"; \
+		valid_sample="test_samples/valid/no_boolean_behaviour_parameter.$${extension}"; \
+		positive_count="$$(ast-grep scan \
+			--rule rules/no_boolean_behaviour_parameter.yml \
+			--json=stream "$${positive_sample}" | awk 'END { print NR }')"; \
+		if [[ "$${positive_count}" -ne 1 ]]; then \
+			echo "FAIL no-boolean-behaviour-parameter: expected 1 warning for $${positive_sample}, got $${positive_count}"; \
+			exit 1; \
+		fi; \
+		valid_result="$$(ast-grep scan \
+			--rule rules/no_boolean_behaviour_parameter.yml \
+			--json=compact "$${valid_sample}")"; \
+		if [[ "$${valid_result}" != "[]" ]]; then \
+			echo "FAIL no-boolean-behaviour-parameter: unexpected warning for $${valid_sample}"; \
+			exit 1; \
+		fi; \
+	done; \
+	echo "PASS no-boolean-behaviour-parameter: one warning per language; data boolean parameters ignored"
 
 
 .PHONY: gl
