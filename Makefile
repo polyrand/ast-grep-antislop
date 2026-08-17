@@ -49,8 +49,8 @@ rules-archive: $(RULES_ARCHIVE) ## Create the downloadable ast-grep rules archiv
 $(RULES_ARCHIVE): sgconfig.yml $(wildcard rules/*.yml)
 	tar -czf "$@" sgconfig.yml rules
 
-.PHONY: test test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition
-test: test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition ## Verify every rule against its same-named language sample.
+.PHONY: test test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return
+test: test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return ## Verify every rule against its same-named language sample.
 
 test-javascript: ## Verify all JavaScript rules.
 	$(call run_rule_tests,javascript,js)
@@ -144,6 +144,27 @@ test-no-complex-boolean-condition: ## Verify complex boolean condition warnings 
 		fi; \
 	done; \
 	echo "PASS no-complex-boolean-condition: one warning per language; named parts and split branches ignored"
+
+test-no-raw-deserializer-return: ## Verify raw deserializer return warnings and valid cases.
+	@for extension in js ts py; do \
+		positive_sample="test_samples/no_raw_deserializer_return.$${extension}"; \
+		valid_sample="test_samples/valid/no_raw_deserializer_return.$${extension}"; \
+		positive_count="$$(ast-grep scan \
+			--rule rules/no_raw_deserializer_return.yml \
+			--json=stream "$${positive_sample}" | awk 'END { print NR }')"; \
+		if [[ "$${positive_count}" -ne 1 ]]; then \
+			echo "FAIL no-raw-deserializer-return: expected 1 warning for $${positive_sample}, got $${positive_count}"; \
+			exit 1; \
+		fi; \
+		valid_result="$$(ast-grep scan \
+			--rule rules/no_raw_deserializer_return.yml \
+			--json=compact "$${valid_sample}")"; \
+		if [[ "$${valid_result}" != "[]" ]]; then \
+			echo "FAIL no-raw-deserializer-return: unexpected warning for $${valid_sample}"; \
+			exit 1; \
+		fi; \
+	done; \
+	echo "PASS no-raw-deserializer-return: one warning per language; domain parsing before return ignored"
 
 
 .PHONY: gl

@@ -1,0 +1,69 @@
+# TypeScript
+id: typescript-no-raw-deserializer-return
+language: TypeScript
+severity: warning
+message: 'Review raw deserializer return. Parse into domain type. Return domain value. Keep raw data local.'
+utils:
+  raw-deserializer-call:
+    any:
+      - pattern: JSON.parse($$$)
+      - pattern: $OBJECT.json($$$)
+      - pattern: deserialize($$$)
+      - pattern: fromJson($$$)
+      - pattern: fromJSON($$$)
+      - pattern: parseJson($$$)
+      - pattern: parseJSON($$$)
+rule:
+  all:
+    - matches: raw-deserializer-call
+    - inside:
+        kind: return_statement
+        stopBy: neighbor
+---
+# JavaScript
+id: javascript-no-raw-deserializer-return
+language: JavaScript
+severity: warning
+message: 'Review raw deserializer return. Parse into domain type. Return domain value. Keep raw data local.'
+utils:
+  raw-deserializer-call:
+    any:
+      - pattern: JSON.parse($$$)
+      - pattern: $OBJECT.json($$$)
+      - pattern: deserialize($$$)
+      - pattern: fromJson($$$)
+      - pattern: fromJSON($$$)
+      - pattern: parseJson($$$)
+      - pattern: parseJSON($$$)
+rule:
+  all:
+    - matches: raw-deserializer-call
+    - inside:
+        kind: return_statement
+        stopBy: neighbor
+---
+# Python
+id: python-no-raw-deserializer-return
+language: Python
+severity: warning
+message: 'Review raw deserializer return. Parse into domain type. Return domain value. Keep raw data local.'
+utils:
+  raw-deserializer-call:
+    any:
+      - pattern: json.loads($$$)
+      - pattern: json.load($$$)
+      - pattern: yaml.safe_load($$$)
+      - pattern: yaml.load($$$)
+      - pattern: tomllib.loads($$$)
+      - pattern: tomllib.load($$$)
+      - pattern: pickle.loads($$$)
+      - pattern: pickle.load($$$)
+      - pattern: deserialize($$$)
+      - pattern: from_json($$$)
+      - pattern: parse_json($$$)
+rule:
+  all:
+    - matches: raw-deserializer-call
+    - inside:
+        kind: return_statement
+        stopBy: neighbor
