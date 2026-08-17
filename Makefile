@@ -6,9 +6,6 @@ MAKEFLAGS += --no-builtin-rules
 UTC_ISO_DATE = $(shell date -u +"%Y-%m-%d%Z")
 UTC_ISO_TIME = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-OP_ACCOUNT ?= my.1password.com ## 1Password account.
-OP_ACCOUNT := $(strip $(OP_ACCOUNT))
-
 .DEFAULT_GOAL := help
 .PHONY: help
 help: ## Display available targets and variables.
