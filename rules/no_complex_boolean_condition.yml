@@ -1,0 +1,93 @@
+# TypeScript
+id: typescript-no-complex-boolean-condition
+language: TypeScript
+severity: warning
+message: 'Review boolean condition. Consider naming parts or splitting branches. Keep simple conditions inline.'
+utils:
+  boolean-operation:
+    all:
+      - kind: binary_expression
+      - has:
+          field: operator
+          regex: '^(?:&&|\|\|)$'
+          stopBy: end
+rule:
+  all:
+    - matches: boolean-operation
+    - has:
+        matches: boolean-operation
+        stopBy: end
+    - not:
+        inside:
+          matches: boolean-operation
+          stopBy: end
+    - inside:
+        any:
+          - kind: if_statement
+          - kind: while_statement
+          - kind: for_statement
+          - kind: ternary_expression
+        field: condition
+        stopBy: end
+---
+# JavaScript
+id: javascript-no-complex-boolean-condition
+language: JavaScript
+severity: warning
+message: 'Review boolean condition. Consider naming parts or splitting branches. Keep simple conditions inline.'
+utils:
+  boolean-operation:
+    all:
+      - kind: binary_expression
+      - has:
+          field: operator
+          regex: '^(?:&&|\|\|)$'
+          stopBy: end
+rule:
+  all:
+    - matches: boolean-operation
+    - has:
+        matches: boolean-operation
+        stopBy: end
+    - not:
+        inside:
+          matches: boolean-operation
+          stopBy: end
+    - inside:
+        any:
+          - kind: if_statement
+          - kind: while_statement
+          - kind: for_statement
+          - kind: ternary_expression
+        field: condition
+        stopBy: end
+---
+# Python
+id: python-no-complex-boolean-condition
+language: Python
+severity: warning
+message: 'Review boolean condition. Consider naming parts or splitting branches. Keep simple conditions inline.'
+utils:
+  boolean-operation:
+    all:
+      - kind: boolean_operator
+      - has:
+          field: operator
+          regex: '^(?:and|or)$'
+          stopBy: end
+rule:
+  all:
+    - matches: boolean-operation
+    - has:
+        matches: boolean-operation
+        stopBy: end
+    - not:
+        inside:
+          matches: boolean-operation
+          stopBy: end
+    - inside:
+        any:
+          - kind: if_statement
+          - kind: while_statement
+        field: condition
+        stopBy: end

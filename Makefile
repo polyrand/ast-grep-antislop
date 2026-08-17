@@ -49,8 +49,8 @@ rules-archive: $(RULES_ARCHIVE) ## Create the downloadable ast-grep rules archiv
 $(RULES_ARCHIVE): sgconfig.yml $(wildcard rules/*.yml)
 	tar -czf "$@" sgconfig.yml rules
 
-.PHONY: test test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter
-test: test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter ## Verify every rule against its same-named language sample.
+.PHONY: test test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition
+test: test-javascript test-typescript test-python test-single-use-functions-same-file test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition ## Verify every rule against its same-named language sample.
 
 test-javascript: ## Verify all JavaScript rules.
 	$(call run_rule_tests,javascript,js)
@@ -100,8 +100,50 @@ test-no-boolean-behaviour-parameter: ## Verify boolean behaviour parameter warni
 			echo "FAIL no-boolean-behaviour-parameter: unexpected warning for $${valid_sample}"; \
 			exit 1; \
 		fi; \
-	done; \
+		done; \
 	echo "PASS no-boolean-behaviour-parameter: one warning per language; data boolean parameters ignored"
+
+test-no-discarded-validator-result: ## Verify discarded validator result warnings and valid cases.
+	@for extension in js ts py; do \
+		positive_sample="test_samples/no_discarded_validator_result.$${extension}"; \
+		valid_sample="test_samples/valid/no_discarded_validator_result.$${extension}"; \
+		positive_count="$$(ast-grep scan \
+			--rule rules/no_discarded_validator_result.yml \
+			--json=stream "$${positive_sample}" | awk 'END { print NR }')"; \
+		if [[ "$${positive_count}" -ne 1 ]]; then \
+			echo "FAIL no-discarded-validator-result: expected 1 warning for $${positive_sample}, got $${positive_count}"; \
+			exit 1; \
+		fi; \
+		valid_result="$$(ast-grep scan \
+			--rule rules/no_discarded_validator_result.yml \
+			--json=compact "$${valid_sample}")"; \
+		if [[ "$${valid_result}" != "[]" ]]; then \
+			echo "FAIL no-discarded-validator-result: unexpected warning for $${valid_sample}"; \
+			exit 1; \
+		fi; \
+	done; \
+	echo "PASS no-discarded-validator-result: one warning per language; consumed results ignored"
+
+test-no-complex-boolean-condition: ## Verify complex boolean condition warnings and valid cases.
+	@for extension in js ts py; do \
+		positive_sample="test_samples/no_complex_boolean_condition.$${extension}"; \
+		valid_sample="test_samples/valid/no_complex_boolean_condition.$${extension}"; \
+		positive_count="$$(ast-grep scan \
+			--rule rules/no_complex_boolean_condition.yml \
+			--json=stream "$${positive_sample}" | awk 'END { print NR }')"; \
+		if [[ "$${positive_count}" -ne 1 ]]; then \
+			echo "FAIL no-complex-boolean-condition: expected 1 warning for $${positive_sample}, got $${positive_count}"; \
+			exit 1; \
+		fi; \
+		valid_result="$$(ast-grep scan \
+			--rule rules/no_complex_boolean_condition.yml \
+			--json=compact "$${valid_sample}")"; \
+		if [[ "$${valid_result}" != "[]" ]]; then \
+			echo "FAIL no-complex-boolean-condition: unexpected warning for $${valid_sample}"; \
+			exit 1; \
+		fi; \
+	done; \
+	echo "PASS no-complex-boolean-condition: one warning per language; named parts and split branches ignored"
 
 
 .PHONY: gl

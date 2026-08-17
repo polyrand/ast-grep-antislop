@@ -1,0 +1,98 @@
+# TypeScript
+id: typescript-no-discarded-validator-result
+language: TypeScript
+severity: warning
+message: 'Validator result discarded. Return parsed value, or use result. Keep discard only for side effects.'
+utils:
+  validator-name:
+    regex: '^(?:validate|check|assert|ensure|verify)(?:$|[_A-Z].*)'
+  validator-call:
+    all:
+      - kind: call_expression
+      - has:
+          field: function
+          any:
+            - all:
+                - kind: identifier
+                - matches: validator-name
+            - all:
+                - kind: member_expression
+                - has:
+                    field: property
+                    all:
+                      - kind: property_identifier
+                      - matches: validator-name
+                    stopBy: end
+          stopBy: end
+rule:
+  all:
+    - matches: validator-call
+    - inside:
+        kind: expression_statement
+        stopBy: neighbor
+---
+# JavaScript
+id: javascript-no-discarded-validator-result
+language: JavaScript
+severity: warning
+message: 'Validator result discarded. Return parsed value, or use result. Keep discard only for side effects.'
+utils:
+  validator-name:
+    regex: '^(?:validate|check|assert|ensure|verify)(?:$|[_A-Z].*)'
+  validator-call:
+    all:
+      - kind: call_expression
+      - has:
+          field: function
+          any:
+            - all:
+                - kind: identifier
+                - matches: validator-name
+            - all:
+                - kind: member_expression
+                - has:
+                    field: property
+                    all:
+                      - kind: property_identifier
+                      - matches: validator-name
+                    stopBy: end
+          stopBy: end
+rule:
+  all:
+    - matches: validator-call
+    - inside:
+        kind: expression_statement
+        stopBy: neighbor
+---
+# Python
+id: python-no-discarded-validator-result
+language: Python
+severity: warning
+message: 'Validator result discarded. Return parsed value, or use result. Keep discard only for side effects.'
+utils:
+  validator-name:
+    regex: '^(?:validate|check|assert|ensure|verify)(?:$|[_A-Z].*)'
+  validator-call:
+    all:
+      - kind: call
+      - has:
+          field: function
+          any:
+            - all:
+                - kind: identifier
+                - matches: validator-name
+            - all:
+                - kind: attribute
+                - has:
+                    field: attribute
+                    all:
+                      - kind: identifier
+                      - matches: validator-name
+                    stopBy: end
+          stopBy: end
+rule:
+  all:
+    - matches: validator-call
+    - inside:
+        kind: expression_statement
+        stopBy: neighbor
