@@ -2,7 +2,7 @@
 id: typescript-require-safety-comment-for-type-assertion
 language: TypeScript
 severity: warning
-message: This type assertion has no SAFETY justification immediately before or inside its statement.
+message: 'Type assertion has no SAFETY comment. Add SAFETY: source, invariant, and reason. Remove assertion if no safety case exists.'
 utils:
   non-const-assertion:
     any:
@@ -38,7 +38,7 @@ rule:
 id: javascript-require-safety-comment-for-type-assertion
 language: JavaScript
 severity: warning
-message: This JSDoc type assertion has no SAFETY justification.
+message: 'JSDoc type assertion has no SAFETY comment. Add SAFETY: source, invariant, and reason. Remove assertion if no safety case exists.'
 rule:
   all:
     - kind: comment
@@ -58,7 +58,7 @@ rule:
 id: python-require-safety-comment-for-type-assertion
 language: Python
 severity: warning
-message: This cast has no SAFETY justification immediately before or inside its statement.
+message: 'Cast has no SAFETY comment. Add SAFETY: source, invariant, and reason. Parse into target type if possible.'
 utils:
   cast-call:
     any:

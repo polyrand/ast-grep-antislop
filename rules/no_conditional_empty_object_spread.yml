@@ -2,7 +2,7 @@
 id: typescript-no-conditional-empty-object-spread
 language: TypeScript
 severity: warning
-message: Conditional empty-object spread hides property omission; build the object explicitly.
+message: Conditional empty-object spread hides omitted fields. Build object explicitly in each branch.
 rule:
   any:
     - pattern:
@@ -16,7 +16,7 @@ rule:
 id: javascript-no-conditional-empty-object-spread
 language: JavaScript
 severity: warning
-message: Conditional empty-object spread hides property omission; build the object explicitly.
+message: Conditional empty-object spread hides omitted fields. Build object explicitly in each branch.
 rule:
   any:
     - pattern:
@@ -30,7 +30,7 @@ rule:
 id: python-no-conditional-empty-object-spread
 language: Python
 severity: warning
-message: Conditional empty-dictionary expansion hides key omission; build the dictionary explicitly.
+message: Conditional empty-dict expansion hides omitted keys. Build dict explicitly in each branch.
 rule:
   any:
     - pattern:

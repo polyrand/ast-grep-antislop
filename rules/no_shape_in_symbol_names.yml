@@ -2,7 +2,7 @@
 id: typescript-no-shape-in-symbol-names
 language: TypeScript
 severity: warning
-message: Rename this symbol for its domain role; shape describes structure rather than ownership.
+message: shape name may be valid. Rename vague application symbol to domain role. Keep test, tensor, and other valid domain uses.
 rule:
   all:
     - any:
@@ -19,7 +19,7 @@ rule:
 id: javascript-no-shape-in-symbol-names
 language: JavaScript
 severity: warning
-message: Rename this symbol for its domain role; shape describes structure rather than ownership.
+message: shape name may be valid. Rename vague application symbol to domain role. Keep test, tensor, and other valid domain uses.
 rule:
   all:
     - any:
@@ -35,7 +35,7 @@ rule:
 id: python-no-shape-in-symbol-names
 language: Python
 severity: warning
-message: Rename this symbol for its domain role; shape describes structure rather than ownership.
+message: shape name may be valid. Rename vague application symbol to domain role. Keep test, tensor, and other valid domain uses.
 rule:
   kind: identifier
   regex: '(?i)^.*shape.*$'

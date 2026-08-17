@@ -2,7 +2,7 @@
 id: typescript-no-unknown-parameters
 language: TypeScript
 severity: warning
-message: Unknown parameters leave input unparsed; accept a domain type and parse at the I/O boundary.
+message: unknown parameter carries unparsed data. Parse it at function entry. Pass domain type onward. Keep unknown only in parser code.
 rule:
   all:
     - any:
@@ -23,7 +23,7 @@ rule:
 id: javascript-no-unknown-parameters
 language: JavaScript
 severity: warning
-message: Unknown parameters leave input unparsed; document a domain type and parse at the I/O boundary.
+message: unknown JSDoc parameter carries unparsed data. Parse it at function entry. Pass domain type onward. Keep unknown only in parser code.
 rule:
   all:
     - kind: comment
@@ -35,7 +35,7 @@ rule:
 id: python-no-unknown-parameters
 language: Python
 severity: warning
-message: Any parameters leave input unparsed; accept a domain type and parse at the I/O boundary.
+message: Any parameter carries unparsed data. Parse it at function entry. Pass domain type onward. Keep Any only in parser code.
 rule:
   all:
     - kind: typed_parameter

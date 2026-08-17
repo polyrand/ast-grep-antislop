@@ -2,7 +2,7 @@
 id: typescript-no-single-use-functions-same-file
 language: TypeScript
 severity: warning
-message: This named function has one direct call in this file; inline it unless the abstraction is intentional.
+message: One direct call does not prove abstraction is unnecessary. Inline one-off trivial wrappers. Keep shared functions and meaningful boundary abstractions, for example parse_args(), even with one caller. Same-file scan misses cross-file callers.
 utils:
   same-name-call:
     pattern: $NAME($$$_ARGS)
@@ -53,7 +53,7 @@ rule:
 id: javascript-no-single-use-functions-same-file
 language: JavaScript
 severity: warning
-message: This named function has one direct call in this file; inline it unless the abstraction is intentional.
+message: One direct call does not prove abstraction is unnecessary. Inline one-off trivial wrappers. Keep shared functions and meaningful boundary abstractions, for example parse_args(), even with one caller. Same-file scan misses cross-file callers.
 utils:
   same-name-call:
     pattern: $NAME($$$_ARGS)
@@ -104,7 +104,7 @@ rule:
 id: python-no-single-use-functions-same-file
 language: Python
 severity: warning
-message: This named function has one direct call in this file; inline it unless the abstraction is intentional.
+message: One direct call does not prove abstraction is unnecessary. Inline one-off trivial wrappers. Keep shared functions and meaningful boundary abstractions, for example parse_args(), even with one caller. Same-file scan misses cross-file callers.
 utils:
   same-name-call:
     pattern: $NAME($$$_ARGS)

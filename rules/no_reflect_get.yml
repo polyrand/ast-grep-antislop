@@ -2,7 +2,7 @@
 id: typescript-no-reflect-get
 language: TypeScript
 severity: warning
-message: Replace Reflect.get with typed property access or boundary parsing.
+message: Reflect.get hides property contract. Use typed property access. Put dynamic key lookup in named adapter.
 rule:
   any:
     - pattern: Reflect.get($$$ARGS)
@@ -13,7 +13,7 @@ rule:
 id: javascript-no-reflect-get
 language: JavaScript
 severity: warning
-message: Replace Reflect.get with direct property access or boundary parsing.
+message: Reflect.get hides property contract. Use direct property access. Put dynamic key lookup in named adapter.
 rule:
   any:
     - pattern: Reflect.get($$$ARGS)
@@ -24,7 +24,7 @@ rule:
 id: python-no-reflect-get
 language: Python
 severity: warning
-message: Replace dynamic getattr access with a typed attribute or parse the boundary value.
+message: getattr hides property contract. Use typed attribute access. Put dynamic key lookup in named adapter.
 rule:
   any:
     - pattern: getattr($OWNER, $KEY)

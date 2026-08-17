@@ -2,7 +2,7 @@
 id: typescript-no-unknown-type-aliases
 language: TypeScript
 severity: warning
-message: This alias only conceals unknown; keep unknown explicit at the parsing boundary.
+message: Type alias hides unknown. Keep raw type local. Parse into domain type before passing it onward.
 rule:
   pattern: type $ALIAS = unknown
 ---
@@ -10,7 +10,7 @@ rule:
 id: javascript-no-unknown-type-aliases
 language: JavaScript
 severity: warning
-message: This JSDoc typedef only conceals unknown; keep unknown explicit at the parsing boundary.
+message: JSDoc alias hides unknown. Keep raw type local. Parse into domain type before passing it onward.
 rule:
   kind: comment
   regex: '(?s).*@typedef\s*\{\s*unknown\s*\}.*'
@@ -19,7 +19,7 @@ rule:
 id: python-no-unknown-type-aliases
 language: Python
 severity: warning
-message: This alias only conceals Any; keep Any explicit at the parsing boundary.
+message: Type alias hides Any. Keep raw type local. Parse into domain type before passing it onward.
 rule:
   any:
     - pattern: $ALIAS = Any

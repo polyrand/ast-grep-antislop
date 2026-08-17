@@ -2,7 +2,7 @@
 id: typescript-no-unsafe-dictionary-type
 language: TypeScript
 severity: warning
-message: This dictionary has no concrete value contract; use an owner or schema-derived value type.
+message: Broad dictionary has no value type. Define value type or schema. Parse raw map into domain type before use.
 utils:
   unsafe-atomic-value:
     any:
@@ -44,7 +44,7 @@ constraints:
 id: javascript-no-unsafe-dictionary-type
 language: JavaScript
 severity: warning
-message: This JSDoc dictionary has no concrete value contract; use an owner or schema-derived value type.
+message: Broad JSDoc dictionary has no value type. Define value type or schema. Parse raw map into domain type before use.
 rule:
   kind: comment
   regex: '(?s).*@typedef\s*\{\s*(?:Record\s*<\s*[^,>]+\s*,\s*(?:unknown|any|object)\s*>|Object\s*\.\s*<\s*[^,>]+\s*,\s*(?:unknown|any|object)\s*>)\s*\}.*'
@@ -53,7 +53,7 @@ rule:
 id: python-no-unsafe-dictionary-type
 language: Python
 severity: warning
-message: This mapping has no concrete value contract; use an owner or schema-derived value type.
+message: Broad mapping has no value type. Define value type or schema. Parse raw map into domain type before use.
 rule:
   pattern:
     context: 'value: $CONTAINER[$KEY, $VALUE]'

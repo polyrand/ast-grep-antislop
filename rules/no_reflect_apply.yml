@@ -2,7 +2,7 @@
 id: typescript-no-reflect-apply
 language: TypeScript
 severity: warning
-message: Replace Reflect.apply with a typed function call or named dispatch interface.
+message: Reflect.apply hides function contract. Use typed call or named dispatcher. Put unavoidable dynamic call in adapter.
 rule:
   any:
     - pattern: Reflect.apply($$$ARGS)
@@ -13,7 +13,7 @@ rule:
 id: javascript-no-reflect-apply
 language: JavaScript
 severity: warning
-message: Replace Reflect.apply with a direct function call or named dispatch interface.
+message: Reflect.apply hides function contract. Use direct call or named dispatcher. Put unavoidable dynamic call in adapter.
 rule:
   any:
     - pattern: Reflect.apply($$$ARGS)
@@ -24,7 +24,7 @@ rule:
 id: python-no-reflect-apply
 language: Python
 severity: warning
-message: Replace dynamic __call__ dispatch with an ordinary typed call or named protocol.
+message: Dynamic __call__ hides function contract. Use typed call or protocol. Put unavoidable dynamic dispatch in adapter.
 rule:
   any:
     - pattern: $FUNCTION.__call__($$$ARGS)

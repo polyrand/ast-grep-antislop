@@ -2,7 +2,7 @@
 id: typescript-no-unknown-returns
 language: TypeScript
 severity: warning
-message: This function exposes unknown to callers; parse the value and return a domain type.
+message: unknown return exposes unparsed data. Parse inside function. Return domain type.
 rule:
   all:
     - any:
@@ -33,7 +33,7 @@ rule:
 id: javascript-no-unknown-returns
 language: JavaScript
 severity: warning
-message: This JSDoc contract exposes unknown to callers; parse and return a domain value.
+message: unknown JSDoc return exposes unparsed data. Parse inside function. Return domain type.
 rule:
   kind: comment
   regex: '(?s).*@returns?\s*\{\s*(?:unknown|Promise\s*<\s*unknown\s*>)\s*\}.*'
@@ -42,7 +42,7 @@ rule:
 id: python-no-unknown-returns
 language: Python
 severity: warning
-message: This function exposes Any to callers; parse the value and return a domain type.
+message: Any return exposes unparsed data. Parse inside function. Return domain type.
 rule:
   kind: function_definition
   has:

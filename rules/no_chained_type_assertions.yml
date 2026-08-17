@@ -2,7 +2,7 @@
 id: typescript-no-chained-type-assertions
 language: TypeScript
 severity: warning
-message: Chained type assertions discard type evidence; preserve the precise type or parse at the boundary.
+message: Chained assertions lose type evidence. Remove extra assertions. Keep precise type or parse broad value into domain type.
 rule:
   any:
     - kind: as_expression
@@ -22,7 +22,7 @@ rule:
 id: javascript-no-chained-type-assertions
 language: JavaScript
 severity: warning
-message: Chained runtime coercions discard evidence; parse once into the required domain value.
+message: Chained coercions can hide conversion errors. Convert and validate once. Use converted value.
 rule:
   pattern: $OUTER($INNER)
 constraints:
@@ -40,7 +40,7 @@ constraints:
 id: python-no-chained-type-assertions
 language: Python
 severity: warning
-message: Chained casts fabricate type evidence; parse once into the required domain value.
+message: cast does not validate at runtime. Parse broad value once into typed value. Use parsed value.
 rule:
   all:
     - any:

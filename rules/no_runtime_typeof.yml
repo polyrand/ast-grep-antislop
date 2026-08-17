@@ -2,7 +2,7 @@
 id: typescript-no-runtime-typeof
 language: TypeScript
 severity: warning
-message: Runtime typeof narrowing does not establish a contract; parse input at its boundary.
+message: typeof check performs runtime narrowing. Parse once into typed value; use it in domain code. Keep check only in parser or intentional runtime dispatch.
 rule:
   pattern: typeof $VALUE
 ---
@@ -10,7 +10,7 @@ rule:
 id: javascript-no-runtime-typeof
 language: JavaScript
 severity: warning
-message: Runtime typeof narrowing does not establish a contract; parse input at its boundary.
+message: typeof check performs runtime narrowing. Parse once into typed value; use it in domain code. Keep check only in parser or intentional runtime dispatch.
 rule:
   pattern: typeof $VALUE
 ---
@@ -18,7 +18,7 @@ rule:
 id: python-no-runtime-typeof
 language: Python
 severity: warning
-message: Ad hoc runtime type narrowing does not establish a contract; parse input at its boundary.
+message: isinstance/type check performs runtime narrowing. Parse once into typed value; use it in domain code. Keep check only in parser or intentional runtime dispatch.
 rule:
   any:
     - pattern: isinstance($VALUE, $TYPE)

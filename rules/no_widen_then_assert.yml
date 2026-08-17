@@ -2,7 +2,7 @@
 id: typescript-no-widen-then-assert
 language: TypeScript
 severity: warning
-message: This flow widens known evidence and then recreates it with an assertion; keep the precise type.
+message: Broad type followed by assertion loses evidence. Keep source type. Parse into target type; do not use assertion as parser.
 rule:
   any:
     - all:
@@ -32,7 +32,7 @@ constraints:
 id: javascript-no-widen-then-assert
 language: JavaScript
 severity: warning
-message: This JSDoc flow widens evidence and then recreates it; preserve the original precise value.
+message: Broad JSDoc followed by assertion loses evidence. Keep source type. Parse into target type; do not use assertion as parser.
 rule:
   all:
     - pattern: const $OUT = $WIDE
@@ -53,7 +53,7 @@ rule:
 id: python-no-widen-then-assert
 language: Python
 severity: warning
-message: This flow widens known evidence and then recreates it with cast; keep the precise type.
+message: Broad annotation followed by cast loses evidence. Keep source type. Parse into target type; do not use cast as validation.
 rule:
   any:
     - all:

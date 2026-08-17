@@ -2,7 +2,7 @@
 id: typescript-no-object-parameters
 language: TypeScript
 severity: warning
-message: Broad object parameters hide the input contract; accept a named owner type.
+message: Broad object parameter hides field contract. Use named domain type. Raw object may enter parser; do not pass it into domain code.
 rule:
   all:
     - any:
@@ -18,7 +18,7 @@ rule:
 id: javascript-no-object-parameters
 language: JavaScript
 severity: warning
-message: Broad object parameters hide the input contract; document and accept a named owner type.
+message: Broad object JSDoc parameter hides field contract. Document named domain type. Raw object may enter parser; do not pass it into domain code.
 rule:
   kind: comment
   regex: '(?s).*@param\s*\{\s*object\s*\}.*'
@@ -27,7 +27,7 @@ rule:
 id: python-no-object-parameters
 language: Python
 severity: warning
-message: Broad object parameters hide the input contract; accept a named owner protocol or class.
+message: Broad object parameter hides field contract. Use named protocol or class. Raw object may enter parser; do not pass it into domain code.
 rule:
   kind: typed_parameter
   has:

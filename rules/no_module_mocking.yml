@@ -2,7 +2,7 @@
 id: typescript-no-module-mocking
 language: TypeScript
 severity: warning
-message: Replace module mocking with dependency injection through a real interface or faithful test implementation.
+message: 'Module mock hides dependency. Use Dependency Injection: pass interface or fake into function. Mock only module-boundary behavior.'
 rule:
   any:
     - pattern: $FRAMEWORK.$METHOD($$$ARGS)
@@ -22,7 +22,7 @@ constraints:
 id: javascript-no-module-mocking
 language: JavaScript
 severity: warning
-message: Replace module mocking with dependency injection through a real interface or faithful test implementation.
+message: 'Module mock hides dependency. Use Dependency Injection: pass dependency or fake into function. Mock only module-boundary behavior.'
 rule:
   any:
     - pattern: $FRAMEWORK.$METHOD($$$ARGS)
@@ -42,7 +42,7 @@ constraints:
 id: python-no-module-mocking
 language: Python
 severity: warning
-message: Replace module patching with dependency injection through a real protocol or faithful test implementation.
+message: 'Module patch hides dependency. Use Dependency Injection: pass protocol or fake into function. Patch only module-boundary behavior.'
 rule:
   any:
     - pattern: mock.patch($$$ARGS)

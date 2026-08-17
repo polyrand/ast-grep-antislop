@@ -2,7 +2,7 @@
 id: typescript-no-known-value-widening
 language: TypeScript
 severity: warning
-message: This explicit broad type discards known value evidence; keep inference or use satisfies.
+message: Known value widened to broad type. Keep inference; use satisfies for shape checks. Keep broad type only when API contract requires it.
 utils:
   known-value:
     any:
@@ -73,7 +73,7 @@ constraints:
 id: javascript-no-known-value-widening
 language: JavaScript
 severity: warning
-message: This broad JSDoc type discards known value evidence; keep the inferred precise type.
+message: Known value widened by broad JSDoc. Remove broad JSDoc; keep inferred type. Keep broad JSDoc only when API contract requires it.
 utils:
   known-value:
     any:
@@ -127,7 +127,7 @@ rule:
 id: python-no-known-value-widening
 language: Python
 severity: warning
-message: This explicit broad annotation discards known value evidence; keep the inferred precise type.
+message: Known value widened by broad annotation. Remove broad annotation; keep inferred type. Keep broad annotation only when API contract requires it.
 utils:
   known-value:
     any:
