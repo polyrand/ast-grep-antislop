@@ -1,0 +1,37 @@
+# Python
+id: python-no-double-backticks-in-docstrings
+language: Python
+severity: warning
+message: 'Docstrings must use Markdown code spans with single backticks; double backticks are not allowed.'
+rule:
+  any:
+    - pattern:
+        context: |
+          def $NAME($$$PARAMS)$$$SUFFIX:
+            $DOCSTMT
+            $$$BODY
+        selector: function_definition
+    - pattern:
+        context: |
+          class $NAME:
+            $DOCSTMT
+            $$$BODY
+        selector: class_definition
+    - pattern:
+        context: |
+          class $NAME($$$BASES):
+            $DOCSTMT
+            $$$BODY
+        selector: class_definition
+    - pattern:
+        context: |
+          $DOCSTMT
+          $$$BODY
+        selector: module
+constraints:
+  DOCSTMT:
+    kind: expression_statement
+    has:
+      kind: string
+      regex: '(?s).*``.*'
+      stopBy: end

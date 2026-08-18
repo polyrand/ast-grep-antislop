@@ -93,7 +93,7 @@ language: Python
 # ...
 ```
 
-`sgconfig.yml` points at the recursive `rules/` directory, so ast-grep loads all 20 files and all 58 rule documents.
+`sgconfig.yml` points at the recursive `rules/` directory, so ast-grep loads all 21 files and all 59 rule documents.
 
 Run every rule against the samples:
 

@@ -13,6 +13,7 @@ ARCHIVE_FILES = \
 	rules/no_complex_boolean_condition.yml \
 	rules/no_conditional_empty_object_spread.yml \
 	rules/no_discarded_validator_result.yml \
+	rules/no_double_backticks_in_docstrings.yml \
 	rules/no_known_value_widening.yml \
 	rules/no_module_mocking.yml \
 	rules/no_nested_callback.yml \
@@ -74,8 +75,8 @@ rules-archive: $(RULES_ARCHIVE) ## Create the downloadable ast-grep rules archiv
 $(RULES_ARCHIVE): $(ARCHIVE_FILES)
 	COPYFILE_DISABLE=1 tar -czf "$@" $(ARCHIVE_FILES)
 
-.PHONY: test test-javascript test-typescript test-python test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return test-no-nested-callback
-test: test-javascript test-typescript test-python test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return test-no-nested-callback ## Verify every rule against its same-named language sample.
+.PHONY: test test-javascript test-typescript test-python test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return test-no-nested-callback test-no-double-backticks-in-docstrings
+test: test-javascript test-typescript test-python test-no-boolean-behaviour-parameter test-no-discarded-validator-result test-no-complex-boolean-condition test-no-raw-deserializer-return test-no-nested-callback test-no-double-backticks-in-docstrings ## Verify every rule against its same-named language sample.
 
 test-javascript: ## Verify all JavaScript rules.
 	$(call run_rule_tests,javascript,js)
@@ -180,6 +181,24 @@ test-no-nested-callback: ## Verify nested Python function warnings.
 		exit 1; \
 	fi; \
 	echo "PASS no-nested-callback: nested defs and lambdas reviewed, including local helpers"
+
+test-no-double-backticks-in-docstrings: ## Verify Markdown-only Python docstrings.
+	@positive_sample="test_samples/no_double_backticks_in_docstrings.py"; \
+	positive_count="$$(ast-grep scan \
+		--rule rules/no_double_backticks_in_docstrings.yml \
+		--json=stream "$${positive_sample}" | awk 'END { print NR }')"; \
+	if [[ "$${positive_count}" -ne 1 ]]; then \
+		echo "FAIL no-double-backticks-in-docstrings: expected 1 warning for $${positive_sample}, got $${positive_count}"; \
+		exit 1; \
+	fi; \
+	valid_result="$$(ast-grep scan \
+		--rule rules/no_double_backticks_in_docstrings.yml \
+		--json=compact test_samples/valid/no_double_backticks_in_docstrings.py)"; \
+	if [[ "$${valid_result}" != "[]" ]]; then \
+		echo "FAIL no-double-backticks-in-docstrings: unexpected warning for valid sample"; \
+		exit 1; \
+	fi; \
+	echo "PASS no-double-backticks-in-docstrings: Markdown docstrings accepted; ordinary strings ignored"
 
 
 .PHONY: gl
